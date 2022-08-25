@@ -1,11 +1,11 @@
 package com.example.demo.student;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -16,13 +16,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final StudentAssembler studentAssembler;
 
-    @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, StudentAssembler studentAssembler) {
         this.studentRepository = studentRepository;
+        this.studentAssembler = studentAssembler;
     }
-    public List<Student> getStudents () {
-        return studentRepository.findAll();
+
+    public ResponseEntity<CollectionModel<EntityModel<Student>>> getStudents () {
+        return ResponseEntity.ok(studentAssembler.toCollectionModel(studentRepository.findAll()));
+        //return studentRepository.findAll();
     }
 
     public void addNewStudent(Student student) {

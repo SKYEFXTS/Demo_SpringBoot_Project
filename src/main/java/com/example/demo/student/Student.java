@@ -11,7 +11,7 @@ import java.time.Period;
 @Entity
 @Table
 @Schema(description = "Details about the student")
-public class Student extends RepresentationModel{
+public class Student extends RepresentationModel<Student> {
     @Id
     @SequenceGenerator(
             name = "student_sequence",
