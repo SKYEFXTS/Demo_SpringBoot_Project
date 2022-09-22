@@ -2,6 +2,7 @@ package com.example.demo.student;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class StudentAssembler implements SimpleRepresentationModelAssembler<Stud
         Long studentId = resource.getContent().getId();
         if(studentId != null){
             resource.add(linkTo(methodOn(StudentController.class).getStudentById(studentId)).withSelfRel());
+            resource.add(Link.of("This is how to hard code a custom link"));
         }
     }
 
