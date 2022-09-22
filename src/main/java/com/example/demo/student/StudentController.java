@@ -4,10 +4,10 @@ package com.example.demo.student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -25,7 +25,7 @@ public class StudentController {
     @Operation(
             summary = "Displays students in the database",
             description = "Displays all the students in the database as a json list")
-    public List<Student> getStudents () {
+    public ResponseEntity<CollectionModel<EntityModel<Student>>> getStudents () {
         return studentService.getStudents();
         //Link link = new Link("http://localhost:8080/api/student");
     }
@@ -34,7 +34,7 @@ public class StudentController {
 
 
     @GetMapping(path = "{studentId}")
-    public ResponseEntity<Student> getStudentById(@PathVariable("studentId") Long studentId){
+    public ResponseEntity<EntityModel<Student>> getStudentById(@PathVariable("studentId") Long studentId){
         return studentService.getStudentById(studentId);
     }
 

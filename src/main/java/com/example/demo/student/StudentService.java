@@ -9,9 +9,6 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Service
 public class StudentService {
 
@@ -62,13 +59,13 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<Student> getStudentById(Long studentId) {
+    public ResponseEntity<EntityModel<Student>> getStudentById(Long studentId) {
 
         return studentRepository.findById(studentId)
-                .map(student -> {
-                    student.add(linkTo(methodOn(StudentController.class).getStudentById(studentId)).withRel("Get by ID "));
-                    student.add(linkTo(methodOn(StudentController.class).getStudents()).withRel("All students"));
-                    return ResponseEntity.ok(student);
-                })
-                .orElseThrow(() -> new IllegalStateException("Student with id " + studentId + " does not exists "));}
+                .map(studentAssembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new IllegalStateException("Student with id " + studentId + " does not exists "));
+
+
+    }
 }
